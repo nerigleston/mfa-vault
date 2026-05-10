@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>MFA Vault — How to configure a site</title>
+    <style>
+      :root {
+        --bg: #0d0f14;
+        --surface: #161920;
+        --surface-2: #1e2130;
+        --border: #ffffff12;
+        --text: #f0f2f5;
+        --text-dim: #7880a0;
+        --primary: #6366f1;
+        --primary-glow: #6366f128;
+        --ok: #10b981;
+        --warn: #f59e0b;
+        --danger: #ef4444;
+        --radius: 14px;
+        --radius-sm: 8px;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+        padding: 0 0 60px;
+      }
+
+      .page-header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 24px 40px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .page-header .logo { width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0; object-fit: contain; }
+      .page-header h1 { font-size: 18px; font-weight: 700; }
+      .page-header p { font-size: 13px; color: var(--text-dim); margin-top: 1px; }
+
+      .content { max-width: 740px; margin: 0 auto; padding: 40px 24px; }
+      .section { margin-bottom: 48px; }
+
+      .section-number {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 28px; height: 28px; background: var(--primary); color: #fff;
+        border-radius: 50%; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-right: 10px;
+      }
+      .section-title { display: flex; align-items: center; font-size: 19px; font-weight: 700; margin-bottom: 16px; }
+      .section-desc { color: var(--text-dim); margin-bottom: 20px; font-size: 14px; }
+
+      .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 14px; }
+      .card--spaced { margin-top: 14px; }
+      .card-title { font-size: 13px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+      .card-title-row { display: flex; justify-content: space-between; align-items: center; }
+      .card-desc { font-size: 14px; color: var(--text-dim); margin-bottom: 14px; }
+      .card-hint { font-size: 13px; color: var(--text-dim); margin-bottom: 10px; }
+      .card-hint-bottom { font-size: 13px; color: var(--text-dim); }
+
+      .steps { display: flex; flex-direction: column; gap: 12px; }
+      .step { display: flex; gap: 14px; align-items: flex-start; }
+      .step-num {
+        width: 22px; height: 22px; background: var(--surface-2); border: 1px solid var(--border);
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 11px; font-weight: 700; color: var(--text-dim); flex-shrink: 0; margin-top: 2px;
+      }
+      .step-text { font-size: 14px; line-height: 1.6; }
+      .step-text strong { color: var(--text); }
+
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px; background: var(--surface-2); border: 1px solid var(--border);
+        border-radius: 5px; padding: 1px 7px; color: var(--primary); white-space: nowrap;
+      }
+      .code-block {
+        background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+        padding: 14px 16px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px; line-height: 1.8; overflow-x: auto; margin: 10px 0; color: var(--text);
+      }
+      .code-block--flush { margin: 0; }
+      .code-block .comment { color: var(--text-dim); }
+      .code-block .attr    { color: var(--ok); }
+      .code-block .val     { color: var(--warn); }
+
+      .priority-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+      .priority-table th { text-align: left; padding: 8px 12px; background: var(--surface-2); color: var(--text-dim); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+      .priority-table td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+      .priority-table tr:hover td { background: var(--surface-2); }
+
+      .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+      .badge-ok  { background: #10b98120; color: var(--ok); }
+      .badge-mid { background: #f59e0b20; color: var(--warn); }
+      .badge-bad { background: #ef444420; color: var(--danger); }
+
+      .example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+      @media (max-width: 560px) { .example-grid { grid-template-columns: 1fr; } .page-header { padding: 18px 20px; } .content { padding: 28px 16px; } }
+      .example-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+      .example-box .site { font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+      .example-box .field { font-size: 11px; color: var(--text-dim); margin-bottom: 2px; }
+      .example-box code { display: block; margin-top: 2px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .example-note { font-size: 12px; color: var(--text-dim); margin-top: 8px; }
+      .example-type-ok   { font-size: 12px; color: var(--ok); }
+      .example-type-warn { font-size: 12px; color: var(--warn); }
+      .type-split  { color: var(--warn); }
+      .type-single { color: var(--ok); }
+
+      .field-list { display: flex; flex-direction: column; gap: 10px; }
+      .field-row  { display: flex; gap: 12px; align-items: flex-start; }
+      .field-label { flex-shrink: 0; }
+      .field-val  { font-size: 14px; color: var(--text-dim); }
+
+      .callout { display: flex; gap: 12px; padding: 14px 16px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6; margin-top: 14px; }
+      .callout-tip { background: #6366f112; border: 1px solid #6366f130; }
+      .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+      .callout--spaced { margin-top: 16px; }
+      .callout--tight  { margin-top: 14px; }
+
+      hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+      .copy-prompt-btn {
+        background: var(--primary-glow); border: 1px solid var(--primary); color: var(--primary);
+        border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 600;
+        cursor: pointer; font-family: inherit; transition: all 0.15s;
+      }
+      .prompt-box {
+        color: var(--text); font-family: inherit; font-size: 13px; line-height: 1.7;
+        white-space: pre-wrap; user-select: all; margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <img class="logo" src="icons/icon48.png" alt="MFA Vault">
+      <div>
+        <h1>How to configure a new site</h1>
+        <p>Guide to finding the URL Pattern and CSS Selector for any MFA login page</p>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- Overview -->
+      <div class="section">
+        <div class="card">
+          <div class="card-title">What you need to configure</div>
+          <p class="card-desc">
+            To automatically fill the MFA code on a site, the extension needs two pieces of data:
+          </p>
+          <div class="field-list">
+            <div class="field-row">
+              <code class="field-label">URL Pattern</code>
+              <span class="field-val">A substring of the page address where the MFA field appears. Example: <code>github.com</code></span>
+            </div>
+            <div class="field-row">
+              <code class="field-label">CSS Selector</code>
+              <span class="field-val">The identifier of the input field where the code will be typed. Example: <code>#app_totp</code></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1: URL Pattern -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">1</span>
+          How to find the URL Pattern
+        </div>
+        <p class="section-desc">
+          The URL Pattern is the part of the page address that identifies the site. The extension checks whether this substring appears in the active tab URL before attempting to fill.
+        </p>
+
+        <div class="card">
+          <div class="card-title">Step by step</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Navigate to the site's login page until you reach the screen asking for the MFA code.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Look at Chrome's address bar and <strong>copy the domain</strong> (the part after <code>https://</code> up to the first <code>/</code>).</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Use that domain as the URL Pattern. The more specific, the better — so the rule doesn't conflict with other pages on the same domain.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Examples</div>
+          <table class="priority-table">
+            <tr>
+              <th>URL in the address bar</th>
+              <th>Suggested URL Pattern</th>
+            </tr>
+            <tr>
+              <td><code>https://github.com/login/two-factor</code></td>
+              <td><code>github.com</code></td>
+            </tr>
+            <tr>
+              <td><code>https://signin.aws.amazon.com/signin?client_id=...</code></td>
+              <td><code>signin.aws.amazon.com</code></td>
+            </tr>
+            <tr>
+              <td><code>https://hub.notro.io/#/login</code></td>
+              <td><code>hub.notro.io</code></td>
+            </tr>
+            <tr>
+              <td><code>https://app.company.com/auth/mfa</code></td>
+              <td><code>app.company.com</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <span>If the site uses different subdomains (e.g. <code>login.company.com</code> and <code>app.company.com</code>), use the full subdomain to avoid the rule firing in the wrong place.</span>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Step 2: CSS Selector -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">2</span>
+          How to find the CSS Selector
+        </div>
+        <p class="section-desc">
+          The CSS Selector identifies the input field where the MFA code will be typed. You'll use Chrome's DevTools to inspect the element.
+        </p>
+
+        <div class="card">
+          <div class="card-title">Step by step</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">With the MFA field visible on screen, <strong>right-click</strong> directly on the field and choose <strong>"Inspect"</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">DevTools opens with the <code>&lt;input&gt;</code> element highlighted in blue. Look for the <code>id</code>, <code>name</code>, and <code>autocomplete</code> attributes on the highlighted line.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Build the selector following the <strong>priority order</strong> below.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">Paste the selector into the "CSS Selector" field in the account's ⚙ panel.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Selector priority order</div>
+          <table class="priority-table">
+            <tr>
+              <th>Type</th>
+              <th>Example</th>
+              <th>Stability</th>
+            </tr>
+            <tr>
+              <td><strong>ID</strong> — <code>id</code> attribute</td>
+              <td><code>#mfaCode</code></td>
+              <td><span class="badge badge-ok">Excellent</span></td>
+            </tr>
+            <tr>
+              <td><strong>Name</strong> — <code>name</code> attribute</td>
+              <td><code>input[name="otp"]</code></td>
+              <td><span class="badge badge-ok">Excellent</span></td>
+            </tr>
+            <tr>
+              <td><strong>Autocomplete</strong> semantic</td>
+              <td><code>input[autocomplete="one-time-code"]</code></td>
+              <td><span class="badge badge-ok">Good</span></td>
+            </tr>
+            <tr>
+              <td><strong>Placeholder</strong></td>
+              <td><code>input[placeholder="enter code"]</code></td>
+              <td><span class="badge badge-mid">Fair</span></td>
+            </tr>
+            <tr>
+              <td><strong>CSS Class</strong></td>
+              <td><code>.mfa-input</code></td>
+              <td><span class="badge badge-bad">Fragile</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title">How to read the inspected HTML</div>
+          <p class="card-hint">Example of what you'll see in DevTools:</p>
+          <div class="code-block">
+&lt;input
+  <span class="attr">id</span>=<span class="val">"mfaCode"</span>           <span class="comment">← use #mfaCode</span>
+  <span class="attr">name</span>=<span class="val">"mfaCode"</span>         <span class="comment">← or input[name="mfaCode"]</span>
+  <span class="attr">autocomplete</span>=<span class="val">"one-time-code"</span>
+  <span class="attr">type</span>=<span class="val">"text"</span>
+  <span class="attr">placeholder</span>=<span class="val">"enter code"</span>
+&gt;
+          </div>
+          <p class="card-hint-bottom">In this case use <code>#mfaCode</code> — the <code>id</code> attribute is the most stable.</p>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Step 3: Field type -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">3</span>
+          Single input or split fields?
+        </div>
+        <p class="section-desc">
+          Some sites use a single field for all 6 digits. Others show 6 separate boxes (one per digit). The extension detects this automatically — but the selector changes.
+        </p>
+
+        <div class="example-grid">
+          <div class="example-box">
+            <div class="site type-single">✓ Single input</div>
+            <div class="code-block code-block--flush">
+&lt;input <span class="attr">id</span>=<span class="val">"app_totp"</span>
+  <span class="attr">maxlength</span>=<span class="val">"6"</span>&gt;
+            </div>
+            <p class="example-note">Selector: <code>#app_totp</code><br>Returns 1 element → fills the entire code.</p>
+          </div>
+          <div class="example-box">
+            <div class="site type-split">⬡ 6 split fields</div>
+            <div class="code-block code-block--flush">
+&lt;input <span class="attr">name</span>=<span class="val">"code-0"</span> <span class="attr">maxlength</span>=<span class="val">"1"</span>&gt;
+&lt;input <span class="attr">name</span>=<span class="val">"code-1"</span> <span class="attr">maxlength</span>=<span class="val">"1"</span>&gt;
+<span class="comment">... (up to code-5)</span>
+            </div>
+            <p class="example-note">Selector: <code>input[name^="code-"]</code><br>Returns 6 elements → fills one digit per field.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-tip callout--spaced">
+          <span class="callout-icon">💡</span>
+          <span>The <code>^=</code> in the selector means <em>"starts with"</em>. Use it when the fields share a common prefix in their <code>name</code> or <code>id</code> attribute.</span>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Step 4: Examples -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">4</span>
+          Configured site examples
+        </div>
+
+        <div class="example-grid">
+          <div class="example-box">
+            <div class="site">GitHub</div>
+            <div class="field">URL Pattern</div>
+            <code>github.com</code>
+            <div class="field">CSS Selector</div>
+            <code>#app_totp</code>
+            <div class="field">Type</div>
+            <span class="example-type-ok">Single input</span>
+          </div>
+          <div class="example-box">
+            <div class="site">AWS Console</div>
+            <div class="field">URL Pattern</div>
+            <code>signin.aws.amazon.com</code>
+            <div class="field">CSS Selector</div>
+            <code>#mfaCode</code>
+            <div class="field">Type</div>
+            <span class="example-type-ok">Single input</span>
+          </div>
+          <div class="example-box">
+            <div class="site">Notro</div>
+            <div class="field">URL Pattern</div>
+            <code>hub.notro.io</code>
+            <div class="field">CSS Selector</div>
+            <code>input[name^="verification-code"]</code>
+            <div class="field">Type</div>
+            <span class="example-type-warn">6 split fields</span>
+          </div>
+          <div class="example-box">
+            <div class="site">Generic (W3C standard)</div>
+            <div class="field">URL Pattern</div>
+            <code>domain.com</code>
+            <div class="field">CSS Selector</div>
+            <code>input[autocomplete="one-time-code"]</code>
+            <div class="field">Type</div>
+            <span class="example-type-ok">Single input</span>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Step 5: AI alternative -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">5</span>
+          Alternative: use AI to identify the fields
+        </div>
+        <p class="section-desc">
+          If you'd rather not inspect manually, copy the HTML of the field and use the prompt below. The AI returns everything ready to paste into the extension.
+        </p>
+
+        <div class="card">
+          <div class="card-title">1 — Copy the MFA field HTML</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Open the site's MFA page with the code field visible.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Right-click on the field (or the area around it) → <strong>Inspect</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">In DevTools, the <code>&lt;input&gt;</code> element is highlighted in blue. Right-click it → <strong>Copy → Copy outerHTML</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">If the field is part of a larger form, you can also copy the parent element (<code>&lt;form&gt;</code> or the containing <code>&lt;div&gt;</code>) to give the AI more context.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--spaced">
+          <div class="card-title card-title-row">
+            <span>2 — Use this prompt</span>
+            <button id="copyPromptBtn" class="copy-prompt-btn">Copy prompt</button>
+          </div>
+          <div id="promptBox" class="code-block prompt-box">I'm configuring my MFA Vault Chrome extension and need to identify the data for auto-filling the MFA code on this site.
+
+Site: [SITE NAME]
+MFA page URL: [PASTE URL HERE]
+
+Field HTML (copied via DevTools → Inspect → Copy outerHTML):
+[PASTE HTML HERE]
+
+Please return exactly in this format:
+
+URL Pattern: (substring of the URL that identifies the page, e.g. github.com)
+CSS Selector: (most stable selector for the input field, prefer id > name > semantic attributes)
+Type: (Single input OR 6 split fields)
+autoSubmit: (true if there is a submit button in the same form, false if unsure)</div>
+        </div>
+
+        <div class="card card--spaced">
+          <div class="card-title">3 — Apply the result in the extension</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Open MFA Vault and click <strong>⚙</strong> on the account for that site.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Click <strong>+ Add rule</strong> (or <strong>↙ Known site</strong> if a preset already exists).</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Fill in <strong>URL Pattern</strong> and <strong>CSS Selector</strong> with the values returned by the AI.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">Check <strong>"Submit form after filling"</strong> if autoSubmit is <code>true</code>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">5</div>
+              <div class="step-text">Click outside to save and test by clicking the code with the site open.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-tip callout--tight">
+          <span class="callout-icon">💡</span>
+          <span>If you see "Field not found — copied", the selector may be wrong or the page hasn't rendered the field yet. Try copying a larger chunk of HTML (the <code>&lt;form&gt;</code> or the parent component) and repeat the process.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="help.js"></script>
+  </body>
+</html>

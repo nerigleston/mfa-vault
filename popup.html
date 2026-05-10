@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8" />
+        <title>MFA Vault</title>
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+    <body>
+        <header class="header">
+            <div class="header-left">
+                <img class="logo" src="icons/icon48.png" alt="MFA Vault">
+                <h1>MFA Vault</h1>
+            </div>
+            <div class="header-actions">
+                <button
+                    id="exportBtn"
+                    class="btn btn-ghost btn-icon"
+                    title="Export backup"
+                >
+                    ↓
+                </button>
+                <button
+                    id="importBtn"
+                    class="btn btn-ghost btn-icon"
+                    title="Import backup"
+                >
+                    ↑
+                </button>
+                <input type="file" id="importFile" accept=".json" style="display:none" />
+                <button
+                    id="toggleCodesBtn"
+                    class="btn btn-ghost btn-icon"
+                    title="Hide codes"
+                >
+                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    <svg id="eyeOffIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                </button>
+                <button
+                    id="toggleFolder"
+                    class="btn btn-ghost btn-icon"
+                    title="New folder"
+                >
+                    📁
+                </button>
+                <button
+                    id="toggleAdd"
+                    class="btn btn-primary btn-icon"
+                    title="Add account"
+                >
+                    +
+                </button>
+            </div>
+        </header>
+
+        <div class="search-wrap hidden" id="searchWrap">
+            <span class="search-icon">⌕</span>
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Buscar conta..."
+                autocomplete="off"
+            />
+            <button
+                id="searchClear"
+                class="search-clear hidden"
+                title="Limpar busca"
+            >
+                ✕
+            </button>
+        </div>
+
+        <section id="folderForm" class="folder-form hidden">
+            <input
+                id="inputFolderName"
+                type="text"
+                placeholder="Nome da pasta..."
+                autocomplete="off"
+            />
+            <button id="saveFolderBtn" class="btn btn-primary">Criar</button>
+            <button id="cancelFolderBtn" class="btn btn-ghost">✕</button>
+        </section>
+
+        <section id="addForm" class="add-form hidden">
+            <input
+                id="inputName"
+                type="text"
+                placeholder="Nome (ex: GitHub - meu@email.com)"
+                autocomplete="off"
+            />
+            <input
+                id="inputSecret"
+                type="text"
+                placeholder="MFA secret (Base32)"
+                autocomplete="off"
+                spellcheck="false"
+            />
+            <select id="inputFolder" class="folder-select">
+                <option value="">📭 Sem pasta</option>
+            </select>
+            <div class="form-actions">
+                <button id="cancelBtn" class="btn btn-ghost">Cancelar</button>
+                <button id="saveBtn" class="btn btn-primary">Salvar</button>
+            </div>
+            <p id="formError" class="error hidden"></p>
+        </section>
+
+        <div id="list" class="list"></div>
+
+        <p id="emptyState" class="empty hidden"></p>
+
+        <script src="popup.js"></script>
+    </body>
+</html>

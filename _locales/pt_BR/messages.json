@@ -1,0 +1,63 @@
+{
+  "appName":        { "message": "MFA Vault" },
+  "appDescription": { "message": "Gerenciador local de códigos MFA/TOTP (RFC 6238). Armazena nomes e secrets e gera códigos a cada 30s." },
+
+  "codeCopied":        { "message": "Código copiado!" },
+  "codeFilledSubmit":  { "message": "✓ Preenchido — enviando..." },
+  "codeFilled":        { "message": "✓ Código preenchido!" },
+  "urlNoRule":         { "message": "URL sem regra — copiado" },
+  "fieldNotFound":     { "message": "Campo não encontrado — copiado" },
+  "copyFailed":        { "message": "Falha ao copiar" },
+
+  "exportedBackup":    { "message": "Backup exportado!" },
+  "exportedSites":     { "message": "Lista de sites exportada!" },
+  "sitesAdded":        { "message": "$count$ site(s) adicionado(s) aos presets!", "placeholders": { "count": { "content": "$1" } } },
+  "accountsImported":  { "message": "$count$ conta(s) importada(s)!", "placeholders": { "count": { "content": "$1" } } },
+  "accountsAdded":     { "message": "$count$ conta(s) adicionada(s)!", "placeholders": { "count": { "content": "$1" } } },
+  "importError":       { "message": "⚠ Erro ao importar: $msg$", "placeholders": { "msg": { "content": "$1" } } },
+  "genericError":      { "message": "⚠ Erro: $msg$", "placeholders": { "msg": { "content": "$1" } } },
+
+  "folderCreated":     { "message": "Pasta \"$name$\" criada", "placeholders": { "name": { "content": "$1" } } },
+  "folderRemoved":     { "message": "Pasta \"$name$\" removida", "placeholders": { "name": { "content": "$1" } } },
+  "movedNoFolder":     { "message": "Movido para Sem pasta" },
+  "movedToFolder":     { "message": "Movido para \"$name$\"", "placeholders": { "name": { "content": "$1" } } },
+
+  "confirmRemoveAccount":  { "message": "Remover \"$name$\"?", "placeholders": { "name": { "content": "$1" } } },
+  "confirmRemoveFolder":   { "message": "Remover pasta \"$name$\"?", "placeholders": { "name": { "content": "$1" } } },
+  "confirmRemoveFolderAccounts": { "message": "Remover pasta \"$name$\"?\n$count$ MFA(s) ficarão sem pasta.", "placeholders": { "name": { "content": "$1" }, "count": { "content": "$2" } } },
+  "confirmImport":         { "message": "Importar $count$ conta(s) de \"$file$\"?\n\nOK → Substituir tudo (apaga contas atuais)\nCancelar → Mesclar (mantém existentes, adiciona novas)", "placeholders": { "count": { "content": "$1" }, "file": { "content": "$2" } } },
+
+  "placeholderSearch":     { "message": "Buscar conta..." },
+  "placeholderFolderName": { "message": "Nome da pasta..." },
+  "placeholderAccName":    { "message": "Nome (ex: GitHub - meu@email.com)" },
+  "placeholderSecret":     { "message": "MFA secret (Base32)" },
+  "placeholderUrl":        { "message": "URL (ex: github.com)" },
+  "placeholderSelector":   { "message": "Seletor CSS (ex: #otp)" },
+
+  "noFolder":          { "message": "📭 Sem pasta" },
+  "btnCreate":         { "message": "Criar" },
+  "btnCancel":         { "message": "Cancelar" },
+  "btnSave":           { "message": "Salvar" },
+
+  "titleExport":       { "message": "Exportar backup" },
+  "titleImport":       { "message": "Importar backup" },
+  "titleNewFolder":    { "message": "Nova pasta" },
+  "titleAddAccount":   { "message": "Adicionar conta" },
+  "titleHideCode":     { "message": "Ocultar códigos" },
+  "titleShowCode":     { "message": "Mostrar códigos" },
+  "titleRemoveFolder": { "message": "Remover pasta" },
+  "titleRenameFolder": { "message": "Renomear pasta" },
+  "titleMoveFolder":   { "message": "Mover para pasta" },
+  "titleSettings":     { "message": "Configurações de auto-fill" },
+  "titleRemoveAccount":{ "message": "Remover conta" },
+
+  "emptyState":        { "message": "Nenhuma conta. Clique em + para adicionar." },
+  "invalidFile":       { "message": "Arquivo inválido" },
+
+  "knownSite":         { "message": "↙ Site conhecido" },
+  "addRule":           { "message": "+ Adicionar regra" },
+  "autoSubmitLabel":   { "message": "Enviar formulário após preencher" },
+  "importSites":       { "message": "↑ Importar lista de sites" },
+  "exportSites":       { "message": "↓ Exportar lista de sites" },
+  "rulesTitle":        { "message": "Regras de auto-fill" }
+}

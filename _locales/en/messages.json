@@ -1,0 +1,63 @@
+{
+  "appName":        { "message": "MFA Vault" },
+  "appDescription": { "message": "Local TOTP/MFA code generator with one-click auto-fill for any website." },
+
+  "codeCopied":        { "message": "Code copied!" },
+  "codeFilledSubmit":  { "message": "✓ Filled — submitting..." },
+  "codeFilled":        { "message": "✓ Code filled!" },
+  "urlNoRule":         { "message": "URL has no rule — copied" },
+  "fieldNotFound":     { "message": "Field not found — copied" },
+  "copyFailed":        { "message": "Failed to copy" },
+
+  "exportedBackup":    { "message": "Backup exported!" },
+  "exportedSites":     { "message": "Site list exported!" },
+  "sitesAdded":        { "message": "$count$ site(s) added to presets!", "placeholders": { "count": { "content": "$1" } } },
+  "accountsImported":  { "message": "$count$ account(s) imported!", "placeholders": { "count": { "content": "$1" } } },
+  "accountsAdded":     { "message": "$count$ account(s) added!", "placeholders": { "count": { "content": "$1" } } },
+  "importError":       { "message": "⚠ Import error: $msg$", "placeholders": { "msg": { "content": "$1" } } },
+  "genericError":      { "message": "⚠ Error: $msg$", "placeholders": { "msg": { "content": "$1" } } },
+
+  "folderCreated":     { "message": "Folder \"$name$\" created", "placeholders": { "name": { "content": "$1" } } },
+  "folderRemoved":     { "message": "Folder \"$name$\" removed", "placeholders": { "name": { "content": "$1" } } },
+  "movedNoFolder":     { "message": "Moved to No folder" },
+  "movedToFolder":     { "message": "Moved to \"$name$\"", "placeholders": { "name": { "content": "$1" } } },
+
+  "confirmRemoveAccount":  { "message": "Remove \"$name$\"?", "placeholders": { "name": { "content": "$1" } } },
+  "confirmRemoveFolder":   { "message": "Remove folder \"$name$\"?", "placeholders": { "name": { "content": "$1" } } },
+  "confirmRemoveFolderAccounts": { "message": "Remove folder \"$name$\"?\n$count$ MFA account(s) will be unassigned.", "placeholders": { "name": { "content": "$1" }, "count": { "content": "$2" } } },
+  "confirmImport":         { "message": "Import $count$ account(s) from \"$file$\"?\n\nOK → Replace all (deletes current accounts)\nCancel → Merge (keeps existing, adds new)", "placeholders": { "count": { "content": "$1" }, "file": { "content": "$2" } } },
+
+  "placeholderSearch":   { "message": "Search account..." },
+  "placeholderFolderName": { "message": "Folder name..." },
+  "placeholderAccName":  { "message": "Name (e.g. GitHub - me@email.com)" },
+  "placeholderSecret":   { "message": "MFA secret (Base32)" },
+  "placeholderUrl":      { "message": "URL (e.g. github.com)" },
+  "placeholderSelector": { "message": "CSS selector (e.g. #otp)" },
+
+  "noFolder":          { "message": "📭 No folder" },
+  "btnCreate":         { "message": "Create" },
+  "btnCancel":         { "message": "Cancel" },
+  "btnSave":           { "message": "Save" },
+
+  "titleExport":       { "message": "Export backup" },
+  "titleImport":       { "message": "Import backup" },
+  "titleNewFolder":    { "message": "New folder" },
+  "titleAddAccount":   { "message": "Add account" },
+  "titleHideCode":     { "message": "Hide codes" },
+  "titleShowCode":     { "message": "Show codes" },
+  "titleRemoveFolder": { "message": "Remove folder" },
+  "titleRenameFolder": { "message": "Rename folder" },
+  "titleMoveFolder":   { "message": "Move to folder" },
+  "titleSettings":     { "message": "Auto-fill settings" },
+  "titleRemoveAccount":{ "message": "Remove account" },
+
+  "emptyState":        { "message": "No accounts yet. Click + to add." },
+  "invalidFile":       { "message": "Invalid file" },
+
+  "knownSite":         { "message": "↙ Known site" },
+  "addRule":           { "message": "+ Add rule" },
+  "autoSubmitLabel":   { "message": "Submit form after filling" },
+  "importSites":       { "message": "↑ Import site list" },
+  "exportSites":       { "message": "↓ Export site list" },
+  "rulesTitle":        { "message": "Auto-fill rules" }
+}

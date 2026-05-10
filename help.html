@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>MFA Vault — Como configurar um site</title>
+    <style>
+      :root {
+        --bg: #0d0f14;
+        --surface: #161920;
+        --surface-2: #1e2130;
+        --border: #ffffff12;
+        --text: #f0f2f5;
+        --text-dim: #7880a0;
+        --primary: #6366f1;
+        --primary-glow: #6366f128;
+        --ok: #10b981;
+        --warn: #f59e0b;
+        --danger: #ef4444;
+        --radius: 14px;
+        --radius-sm: 8px;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+        padding: 0 0 60px;
+      }
+
+      /* ===== Header ===== */
+      .page-header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 24px 40px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .page-header .logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        object-fit: contain;
+      }
+
+      .page-header h1 {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .page-header p {
+        font-size: 13px;
+        color: var(--text-dim);
+        margin-top: 1px;
+      }
+
+      /* ===== Content ===== */
+      .content {
+        max-width: 740px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
+
+      /* ===== Section ===== */
+      .section {
+        margin-bottom: 48px;
+      }
+
+      .section-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: var(--primary);
+        color: #fff;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-right: 10px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        font-size: 19px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .section-desc {
+        color: var(--text-dim);
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+
+      /* ===== Card ===== */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px 24px;
+        margin-bottom: 14px;
+      }
+
+      .card-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+      }
+
+      /* ===== Steps ===== */
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .step {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+
+      .step-num {
+        width: 22px;
+        height: 22px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-dim);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      .step-text {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .step-text strong {
+        color: var(--text);
+      }
+
+      /* ===== Code / highlight ===== */
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        padding: 1px 7px;
+        color: var(--primary);
+        white-space: nowrap;
+      }
+
+      .code-block {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 14px 16px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        line-height: 1.8;
+        overflow-x: auto;
+        margin: 10px 0;
+        color: var(--text);
+      }
+
+      .code-block .comment { color: var(--text-dim); }
+      .code-block .attr    { color: var(--ok); }
+      .code-block .val     { color: var(--warn); }
+
+      /* ===== Priority table ===== */
+      .priority-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        margin-top: 10px;
+      }
+
+      .priority-table th {
+        text-align: left;
+        padding: 8px 12px;
+        background: var(--surface-2);
+        color: var(--text-dim);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .priority-table td {
+        padding: 9px 12px;
+        border-top: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      .priority-table tr:hover td {
+        background: var(--surface-2);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .badge-ok   { background: #10b98120; color: var(--ok); }
+      .badge-mid  { background: #f59e0b20; color: var(--warn); }
+      .badge-bad  { background: #ef444420; color: var(--danger); }
+
+      /* ===== Example boxes ===== */
+      .example-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      @media (max-width: 560px) {
+        .example-grid { grid-template-columns: 1fr; }
+        .page-header { padding: 18px 20px; }
+        .content { padding: 28px 16px; }
+      }
+
+      .example-box {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 14px;
+      }
+
+      .example-box .site {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+
+      .example-box .field {
+        font-size: 11px;
+        color: var(--text-dim);
+        margin-bottom: 2px;
+      }
+
+      .example-box code {
+        display: block;
+        margin-top: 2px;
+        margin-bottom: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* ===== Field type badge ===== */
+      .type-split { color: var(--warn); }
+      .type-single { color: var(--ok); }
+
+      /* ===== Callout ===== */
+      .callout {
+        display: flex;
+        gap: 12px;
+        padding: 14px 16px;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 14px;
+      }
+
+      .callout-tip {
+        background: #6366f112;
+        border: 1px solid #6366f130;
+      }
+
+      .callout-icon {
+        font-size: 16px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      /* ===== Divider ===== */
+      hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 40px 0;
+      }
+
+      /* ===== Inline-style replacements ===== */
+      .card-desc {
+        font-size: 14px;
+        color: var(--text-dim);
+        margin-bottom: 14px;
+      }
+
+      .field-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .field-row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .field-label {
+        flex-shrink: 0;
+      }
+
+      .field-val {
+        font-size: 14px;
+        color: var(--text-dim);
+      }
+
+      .card-hint {
+        font-size: 13px;
+        color: var(--text-dim);
+        margin-bottom: 10px;
+      }
+
+      .card-hint-bottom {
+        font-size: 13px;
+        color: var(--text-dim);
+      }
+
+      .code-block--flush {
+        margin: 0;
+      }
+
+      .example-note {
+        font-size: 12px;
+        color: var(--text-dim);
+        margin-top: 8px;
+      }
+
+      .callout--spaced {
+        margin-top: 16px;
+      }
+
+      .card-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .copy-prompt-btn {
+        background: var(--primary-glow);
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        border-radius: 6px;
+        padding: 3px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.15s;
+      }
+
+      .prompt-box {
+        color: var(--text);
+        font-family: inherit;
+        font-size: 13px;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        user-select: all;
+        margin-top: 10px;
+      }
+
+      .card--spaced {
+        margin-top: 14px;
+      }
+
+      .callout--tight {
+        margin-top: 14px;
+      }
+
+      .example-type-ok {
+        font-size: 12px;
+        color: var(--ok);
+      }
+
+      .example-type-warn {
+        font-size: 12px;
+        color: var(--warn);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="page-header">
+      <img class="logo" src="icons/icon48.png" alt="MFA Vault">
+      <div>
+        <h1>Como configurar um site novo</h1>
+        <p>Guia para encontrar a URL Pattern e o Seletor CSS de qualquer página de MFA</p>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- Visão geral -->
+      <div class="section">
+        <div class="card">
+          <div class="card-title">O que você vai configurar</div>
+          <p class="card-desc">
+            Para preencher automaticamente o código MFA em um site, a extensão precisa de dois dados:
+          </p>
+          <div class="field-list">
+            <div class="field-row">
+              <code class="field-label">URL Pattern</code>
+              <span class="field-val">Um trecho do endereço da página onde o campo MFA aparece. Exemplo: <code>github.com</code></span>
+            </div>
+            <div class="field-row">
+              <code class="field-label">Seletor CSS</code>
+              <span class="field-val">O identificador do campo de texto onde o código será digitado. Exemplo: <code>#app_totp</code></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Passo 1: URL Pattern -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">1</span>
+          Como encontrar a URL Pattern
+        </div>
+        <p class="section-desc">
+          A URL Pattern é o trecho do endereço da página que identifica o site. A extensão verifica se esse trecho aparece na URL da aba ativa antes de tentar preencher.
+        </p>
+
+        <div class="card">
+          <div class="card-title">Passo a passo</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Acesse a página de login do site até chegar na tela que pede o código MFA.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Olhe a barra de endereços do Chrome e <strong>copie o domínio</strong> (a parte depois de <code>https://</code> até a primeira <code>/</code>).</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Use esse domínio como URL Pattern. Quanto mais específico, melhor — assim a regra não conflita com outros sites do mesmo domínio.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Exemplos</div>
+          <table class="priority-table">
+            <tr>
+              <th>URL na barra</th>
+              <th>URL Pattern sugerida</th>
+            </tr>
+            <tr>
+              <td><code>https://github.com/login/two-factor</code></td>
+              <td><code>github.com</code></td>
+            </tr>
+            <tr>
+              <td><code>https://signin.aws.amazon.com/signin?client_id=...</code></td>
+              <td><code>signin.aws.amazon.com</code></td>
+            </tr>
+            <tr>
+              <td><code>https://hub.notro.io/#/login</code></td>
+              <td><code>hub.notro.io</code></td>
+            </tr>
+            <tr>
+              <td><code>https://app.empresa.com.br/auth/mfa</code></td>
+              <td><code>app.empresa.com.br</code></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="callout callout-tip">
+          <span class="callout-icon">💡</span>
+          <span>Se o site usa subdomínios diferentes (ex: <code>login.empresa.com</code> e <code>app.empresa.com</code>), use o subdomínio completo para evitar que a regra dispare no lugar errado.</span>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Passo 2: Seletor CSS -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">2</span>
+          Como encontrar o Seletor CSS
+        </div>
+        <p class="section-desc">
+          O Seletor CSS identifica o campo de texto onde o código MFA será digitado. Você vai usar o DevTools do Chrome para inspecionar o elemento.
+        </p>
+
+        <div class="card">
+          <div class="card-title">Passo a passo</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Com o campo MFA visível na tela, <strong>clique com o botão direito</strong> diretamente no campo e escolha <strong>"Inspecionar"</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">O DevTools abre com o elemento <code>&lt;input&gt;</code> destacado em azul. Procure os atributos <code>id</code>, <code>name</code> e <code>autocomplete</code> na linha destacada.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Monte o seletor seguindo a <strong>ordem de prioridade</strong> abaixo.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">Cole o seletor no campo "Seletor CSS" no painel ⚙ da conta.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Ordem de prioridade dos seletores</div>
+          <table class="priority-table">
+            <tr>
+              <th>Tipo</th>
+              <th>Exemplo</th>
+              <th>Estabilidade</th>
+            </tr>
+            <tr>
+              <td><strong>ID</strong> — atributo <code>id</code></td>
+              <td><code>#mfaCode</code></td>
+              <td><span class="badge badge-ok">Ótima</span></td>
+            </tr>
+            <tr>
+              <td><strong>Name</strong> — atributo <code>name</code></td>
+              <td><code>input[name="otp"]</code></td>
+              <td><span class="badge badge-ok">Ótima</span></td>
+            </tr>
+            <tr>
+              <td><strong>Autocomplete</strong> semântico</td>
+              <td><code>input[autocomplete="one-time-code"]</code></td>
+              <td><span class="badge badge-ok">Boa</span></td>
+            </tr>
+            <tr>
+              <td><strong>Placeholder</strong></td>
+              <td><code>input[placeholder="enter code"]</code></td>
+              <td><span class="badge badge-mid">Razoável</span></td>
+            </tr>
+            <tr>
+              <td><strong>Classe CSS</strong></td>
+              <td><code>.mfa-input</code></td>
+              <td><span class="badge badge-bad">Frágil</span></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Como ler o HTML inspecionado</div>
+          <p class="card-hint">Exemplo de elemento que você verá no DevTools:</p>
+          <div class="code-block">
+&lt;input
+  <span class="attr">id</span>=<span class="val">"mfaCode"</span>           <span class="comment">← use #mfaCode</span>
+  <span class="attr">name</span>=<span class="val">"mfaCode"</span>         <span class="comment">← ou input[name="mfaCode"]</span>
+  <span class="attr">autocomplete</span>=<span class="val">"one-time-code"</span>
+  <span class="attr">type</span>=<span class="val">"text"</span>
+  <span class="attr">placeholder</span>=<span class="val">"enter code"</span>
+&gt;
+          </div>
+          <p class="card-hint-bottom">Neste caso use <code>#mfaCode</code> — o <code>id</code> é o atributo mais estável.</p>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Passo 3: Tipo de campo -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">3</span>
+          Input único ou campos separados?
+        </div>
+        <p class="section-desc">
+          Alguns sites usam um único campo para os 6 dígitos. Outros mostram 6 caixinhas separadas (uma por dígito). A extensão detecta automaticamente — mas o seletor muda.
+        </p>
+
+        <div class="example-grid">
+          <div class="example-box">
+            <div class="site type-single">✓ Input único</div>
+            <div class="code-block code-block--flush">
+&lt;input <span class="attr">id</span>=<span class="val">"app_totp"</span>
+  <span class="attr">maxlength</span>=<span class="val">"6"</span>&gt;
+            </div>
+            <p class="example-note">Seletor: <code>#app_totp</code><br>Retorna 1 elemento → preenche o código inteiro.</p>
+          </div>
+          <div class="example-box">
+            <div class="site type-split">⬡ 6 campos separados</div>
+            <div class="code-block code-block--flush">
+&lt;input <span class="attr">name</span>=<span class="val">"code-0"</span> <span class="attr">maxlength</span>=<span class="val">"1"</span>&gt;
+&lt;input <span class="attr">name</span>=<span class="val">"code-1"</span> <span class="attr">maxlength</span>=<span class="val">"1"</span>&gt;
+<span class="comment">... (até code-5)</span>
+            </div>
+            <p class="example-note">Seletor: <code>input[name^="code-"]</code><br>Retorna 6 elementos → distribui 1 dígito por campo.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-tip callout--spaced">
+          <span class="callout-icon">💡</span>
+          <span>O <code>^=</code> no seletor significa <em>"começa com"</em>. Use quando os campos têm um prefixo em comum no atributo <code>name</code> ou <code>id</code>.</span>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Passo 4: Exemplos prontos -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">4</span>
+          Exemplos de sites configurados
+        </div>
+
+        <div class="example-grid">
+          <div class="example-box">
+            <div class="site">GitHub</div>
+            <div class="field">URL Pattern</div>
+            <code>github.com</code>
+            <div class="field">Seletor CSS</div>
+            <code>#app_totp</code>
+            <div class="field">Tipo</div>
+            <span class="example-type-ok">Input único</span>
+          </div>
+          <div class="example-box">
+            <div class="site">AWS Console</div>
+            <div class="field">URL Pattern</div>
+            <code>signin.aws.amazon.com</code>
+            <div class="field">Seletor CSS</div>
+            <code>#mfaCode</code>
+            <div class="field">Tipo</div>
+            <span class="example-type-ok">Input único</span>
+          </div>
+          <div class="example-box">
+            <div class="site">Notro</div>
+            <div class="field">URL Pattern</div>
+            <code>hub.notro.io</code>
+            <div class="field">Seletor CSS</div>
+            <code>input[name^="verification-code"]</code>
+            <div class="field">Tipo</div>
+            <span class="example-type-warn">6 campos separados</span>
+          </div>
+          <div class="example-box">
+            <div class="site">Genérico (padrão W3C)</div>
+            <div class="field">URL Pattern</div>
+            <code>dominio.com</code>
+            <div class="field">Seletor CSS</div>
+            <code>input[autocomplete="one-time-code"]</code>
+            <div class="field">Tipo</div>
+            <span class="example-type-ok">Input único</span>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <!-- Passo 5: Alternativa IA -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">5</span>
+          Alternativa: use a IA para identificar
+        </div>
+        <p class="section-desc">
+          Se não quiser inspecionar manualmente, copie o HTML do campo e use o prompt abaixo. A IA retorna tudo pronto para colar na extensão.
+        </p>
+
+        <div class="card">
+          <div class="card-title">1 — Copie o HTML do campo MFA</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Abra a página de MFA do site e deixe o campo de código visível.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Clique com o botão direito no campo (ou na área ao redor) → <strong>Inspecionar</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">No DevTools, o elemento <code>&lt;input&gt;</code> fica destacado em azul. Clique com o botão direito nele → <strong>Copy → Copy outerHTML</strong>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">Se o campo fizer parte de um formulário maior, você também pode copiar o elemento pai (<code>&lt;form&gt;</code> ou <code>&lt;div&gt;</code> que o contém) para dar mais contexto à IA.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card--spaced">
+          <div class="card-title card-title-row">
+            <span>2 — Use este prompt</span>
+            <button id="copyPromptBtn" class="copy-prompt-btn">Copiar prompt</button>
+          </div>
+          <div id="promptBox" class="code-block prompt-box">Estou configurando minha extensão MFA Vault (Chrome) e preciso identificar os dados para preencher automaticamente o código MFA neste site.
+
+Site: [NOME DO SITE]
+URL da página de MFA: [COLE A URL AQUI]
+
+HTML do campo (copiado via DevTools → Inspecionar → Copy outerHTML):
+[COLE O HTML AQUI]
+
+Por favor, retorne exatamente neste formato:
+
+URL Pattern: (trecho da URL que identifica a página, ex: github.com)
+Seletor CSS: (seletor mais estável do campo de input, preferir id > name > atributos semânticos)
+Tipo: (Input único OU 6 campos separados)
+autoSubmit: (true se houver botão de envio no mesmo formulário, false se não tiver certeza)</div>
+        </div>
+
+        <div class="card card--spaced">
+          <div class="card-title">3 — Aplique o resultado na extensão</div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div class="step-text">Abra a extensão MFA Vault e clique em <strong>⚙</strong> na conta correspondente ao site.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div class="step-text">Clique em <strong>+ Adicionar regra</strong> (ou <strong>↙ Site conhecido</strong> se já existir um preset).</div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div class="step-text">Preencha <strong>URL Pattern</strong> e <strong>Seletor CSS</strong> com os valores retornados pela IA.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div class="step-text">Marque <strong>"Enviar formulário após preencher"</strong> se o autoSubmit for <code>true</code>.</div>
+            </div>
+            <div class="step">
+              <div class="step-num">5</div>
+              <div class="step-text">Clique fora para salvar e teste clicando no código com o site aberto.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout callout-tip callout--tight">
+          <span class="callout-icon">💡</span>
+          <span>Se aparecer "Campo não encontrado — copiado", o seletor pode estar errado ou a página ainda não renderizou o campo. Tente copiar um trecho maior de HTML (o <code>&lt;form&gt;</code> ou o componente pai) e repita o processo.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="help.js"></script>
+  </body>
+</html>
