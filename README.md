@@ -1,5 +1,7 @@
 # MFA Vault — Extensão Chrome
 
+**Chrome Web Store:** https://chromewebstore.google.com/detail/mfa-vault/lnahclndpjnkkflekochfdieadamfflh
+
 Extensão Chrome para geração de códigos TOTP/MFA de 6 dígitos (RFC 6238), com **preenchimento automático** nos campos de autenticação dos sites cadastrados.
 
 ---
